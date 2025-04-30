@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Report</title>
+    <link rel="stylesheet" href="{% static 'css/admin_report.css' %}"> <!-- Link to your CSS file -->   
+    {% include 'main_linkings.html' %}
+
+</head>
+
+<body>
+
+    {% include 'header.html' %}
+
+    <div class="admin-report-container">
+        <h1 class="admin-report-container__title">Admin Report</h1>
+        <div class="admin-report-container__counts">
+            <p class="admin-report-container__count">Total Users: <span class="admin-report-container__count-value">{{ userscount }}</span></p>
+            <p class="admin-report-container__count">Total Managers: <span class="admin-report-container__count-value">{{ managerscount }}</span></p>
+            <p class="admin-report-container__count">Total Staff: <span class="admin-report-container__count-value">{{ staffscount }}</span></p>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+</body>
+</html>

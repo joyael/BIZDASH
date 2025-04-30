@@ -1,0 +1,5 @@
+db.sqlite3
+mangage.py
+BIZDASH/__pycache__/*
+biz_dash_app/__pycache__/* 
+biz_dash_app/migrations/__pycache__/*

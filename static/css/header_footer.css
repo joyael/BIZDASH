@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.special-header {
+    width: 100%;
+    margin: 0px;
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+}
+
+.special-header__company-name {
+    display: inline-block;
+    margin: 0;
+    font-size: 24px;
+}
+
+.special-header nav {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.special-header__nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.special-header__nav-menu > li {
+    display: inline-block;
+    position: relative;
+}
+
+.special-header__nav-menu > li > a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: block;
+}
+
+.special-header__nav-menu > li:hover > a {
+    background-color: #555;
+}
+
+.special-header__submenu {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 1;
+}
+
+.special-header__nav-menu > li:hover .special-header__submenu {
+    display: block;
+}
+
+.special-header__submenu li {
+    width: 150px;
+}
+
+.special-header__submenu li a {
+    color: white;
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+}
+
+.special-header__submenu li a:hover {
+    background-color: #555;
+}
+
+.special-header__auth-buttons {
+    display: inline-block;
+    float: right;
+}
+
+.special-header__profile-button, .special-header__login-button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.special-header__profile-button:hover, .special-header__login-button:hover {
+    background-color: #0056b3;
+}
+
+.special-footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+footer {
+    position: fixed;      /* Fixes the footer position */
+    bottom: 0;            /* Anchors to the bottom */
+    left: 0;              /* Aligns to the left */
+    width: 100%; 
+}

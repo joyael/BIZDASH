@@ -27,9 +27,9 @@ def user_logout(request):
 def admin_report(request):
     # Ensure the user is authenticated and has the correct role
     if request.user.role == 'admin':
-        users = CustomUser .objects.all()
-        managers = CustomUser .objects.filter(role='manager')
-        staffs = CustomUser .objects.filter(role='staff')
+        users = CustomUser.objects.all()
+        managers = CustomUser.objects.filter(role='manager')
+        staffs = CustomUser.objects.filter(role='staff')
         userscount = users.count()
         managerscount = managers.count()
         staffscount = staffs.count()
@@ -57,7 +57,7 @@ def add_user(request):
             return redirect('view_users')  # Redirect to a user list or another page
     else:
         form = CustomUserForm()
-    return render(request, 'add_user.html', {'form': form})
+    return render(request, 'staff_manage/add_user.html', {'form': form})
 
 
 @login_required

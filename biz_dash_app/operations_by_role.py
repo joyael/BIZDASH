@@ -4,14 +4,18 @@ operations = {
         "Dashboard":"",
     },
     "manager": {
-        "staffs": {
-            "Create Department": "department_create",
-            "View Departments": "department_list"
+        "Staffs": {
+            "Add Staff": "add_user",
+            "Staff list": "view_staffs",
         },
+        "Reports":{
+            "View Reports":"reports_manager_view",
+        }
     },
     "staff": {
-        "Departments": {
-            "View Departments": "department_list"
+        "Reports": {
+            "Add Report": "add_report",
+            "Report List": "reports_staff_view",
         },
     },
 }

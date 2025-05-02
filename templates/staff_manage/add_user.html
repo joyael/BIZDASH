@@ -1,29 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
 
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <title>Add Staff</title>
+    <link rel="stylesheet" href="{% static 'css/add_user.css' %}"> <!-- Link to external CSS -->
+    {% include 'main_linkings.html' %}
 
 </head>
 
 <body>
-
-    <h1>Add Staff</h1>
-
-    <form method="post">
-
-        {% csrf_token %}
-
-        {{ form.as_p }}
-
-        <button type="submit">Add Staff</button>
-
-    </form>
-
+    {% include 'header.html' %}
+    <div class="add-staff-container">
+        <h1 class="add-staff-title">Add Staff</h1>
+        <form class="add-staff-form" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button class="add-staff-button" type="submit">Add Staff</button>
+        </form>
+    </div>
+    {% include 'footer.html' %}
 </body>
-
 </html>

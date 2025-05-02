@@ -1,12 +1,28 @@
 {% load static %}
-<form method="post">
-    {% csrf_token %}
-    <label for="username">Username:</label>
-    <input type="text" name="username" required>
-    <label for="password">Password:</label>
-    <input type="password" name="password" required>
-    <button type="submit">Login</button>
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">  <!-- Link to external CSS -->
+    {% include 'main_linkings.html' %}
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="login-form-container">
+        <form class="login-form" method="post">
+            {% csrf_token %}
+            <label class="login-form-label" for="username">Username:</label>
+            <input class="login-form-input" type="text" name="username" required>
+            <label class="login-form-label" for="password">Password:</label>
+            <input class="login-form-input" type="password" name="password" required>
+            <button class="login-form-button" type="submit">Login</button>
+            {% if error %}
+                <p class="login-form-error">{{ error }}</p>
+            {% endif %}
+        </form>
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>

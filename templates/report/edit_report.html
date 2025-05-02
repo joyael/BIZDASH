@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Report</title>
+    <link rel="stylesheet" href="{% static 'css/edit_report.css' %}"> <!-- Link to external CSS -->
+    {% include 'main_linkings.html' %}
+</head>
+
+
+<body>
+
+    {% include 'header.html' %}
+    <div class="edit-report-container">
+    <h1 class="edit-report-title">Edit Report</h1>
+
+    <form class="edit-report-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button class="edit-report-button" type="submit">Update Report</button>
+    </form>
+    <a class="edit-report-cancel" href="{% url 'view_report' report.id %}">Cancel</a>
+    </div>
+    {% include 'footer.html' %}
+
+</body>
+</html>

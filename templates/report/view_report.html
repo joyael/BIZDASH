@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Report</title>
+    <link rel="stylesheet" href="{% static 'css/view_report.css' %}"> <!-- Link to external CSS -->
+    {% include 'main_linkings.html' %}
+</head>
+
+<body>
+    {% include 'header.html' %}
+<div class="view-report-container">
+    <h1 class="view-report-title">Report Details</h1>
+    <p class="view-report-item"><strong>Name:</strong> {{ report.name }}</p>
+    <p class="view-report-item"><strong>Address:</strong> {{ report.address }}</p>
+    <p class="view-report-item"><strong>Phone Number:</strong> {{ report.phone_number }}</p>
+    <p class="view-report-item"><strong>ID Proof:</strong> <img src="{{ report.id_proof.url }}" alt="ID Proof" class="view-report-image"></p>
+    <p class="view-report-item"><strong>Comment:</strong> {{ report.comment }}</p>
+    <p class="view-report-item"><strong>Date:</strong> {{ report.date }}</p>
+    <p class="view-report-item"><strong>Status:</strong> {{ report.get_status_display }}</p>
+
+    <div class="view-report-actions">
+        <a class="view-report-edit" href="{% url 'edit_report' report.id %}">Edit Report</a>
+        <form method="post" action="{% url 'delete_report' report.id %}" class="view-report-delete-form" style="display:inline;">
+            {% csrf_token %}
+            <button class="view-report-delete-button" type="submit">Delete Report</button>
+        </form>
+        <a class="view-report-back" href="{% url 'view_reports' %}">Back to Reports</a>
+    </div>
+
+</div>
+{% include 'footer.html' %}
+</body>
+</html>

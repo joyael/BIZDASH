@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Report</title>
+    <link rel="stylesheet" href="{% static 'css/delete_report.css' %}"> <!-- Link to external CSS -->
+    {% include 'main_linkings.html' %}
+</head>
+
+<body>
+    {% include 'header.html' %}
+<div class="delete-report-container">
+    <h1 class="delete-report-title">Delete Report</h1>
+    <p class="delete-report-message">Are you sure you want to delete the report for <strong>{{ report.name }}</strong>?</p>
+    <form class="delete-report-form" method="post">
+        {% csrf_token %}
+        <button class="delete-report-confirm-button" type="submit">Confirm Delete</button>
+    </form>
+    <a class="delete-report-cancel" href="{% url 'view_report' report.id %}">Cancel</a>
+</div>
+
+{% include 'footer.html' %}
+</body>
+</html>

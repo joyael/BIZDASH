@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete User</title>
+    <link rel="stylesheet" href="{% static 'css/delete_user.css' %}"> 
+    {% include 'main_linkings.html' %}
+
+</head>
+    
+<body>
+    {% include 'header.html' %}
+    <div class="delete-user-container">
+        <h1 class="delete-user-title">Delete User: {{ user.username }}</h1>
+        <p class="delete-user-confirmation">Are you sure you want to delete this user?</p>
+        <form class="delete-user-form" method="post">
+            {% csrf_token %}
+            <button class="delete-user-button" type="submit">Confirm Delete</button>
+        </form>
+        <a class="delete-user-cancel" href="{% url 'view_user' user.id %}">Cancel</a>
+    </div>
+    {% include 'footer.html' %}
+</body>
+
+
+
+
+</html>

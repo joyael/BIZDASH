@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Home</title>
+    <link rel="stylesheet" href="{% static 'css/manager_home.css' %}"> <!-- Link to your external CSS file -->
+    {% include 'main_linkings.html' %}
+</head>
+<body>
+{% include 'header.html' %}
+<div class="manager-home-container">
+    <h1 class="manager-home-title">Welcome, {{ request.user.first_name }}!</h1>
+    <div class="manager-home-summary">
+        <h2>Summary</h2>
+        <p><strong>Number of Staff Members:</strong> {{ staff_count }}</p>
+        <p><strong>Approved Reports:</strong> {{ approved_count }}</p>
+        <p><strong>Rejected Reports:</strong> {{ rejected_count }}</p>
+        <p><strong>Pending Reports:</strong> {{ pending_count }}</p>
+    </div>
+
+    <!-- <div class="manager-home-actions">
+
+        <a href="{% url 'reports_staff_view' %}" class="manager-home-button">View Staff Reports</a>
+
+        <a href="{% url 'add_report' %}" class="manager-home-button">Add New Report</a>
+
+    </div> -->
+
+</div>
+
+{% include 'footer.html' %}
+
+</body>
+
+</html>

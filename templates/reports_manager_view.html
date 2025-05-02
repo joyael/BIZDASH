@@ -1,0 +1,115 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>View Reports</title>
+
+    <link rel="stylesheet" href="{% static 'css/reports_manager_view.css' %}"> <!-- Link to your external CSS file -->
+
+    {% include 'main_linkings.html' %}
+
+</head>
+
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="view-reports-container">
+
+    <h1 class="view-reports-title">Reports of Your Staffs</h1>
+
+
+    <table class="view-reports-table">
+
+        <thead>
+
+            <tr>
+
+                <th class="view-reports-header">Name</th>
+
+                <th class="view-reports-header">Address</th>
+
+                <th class="view-reports-header">Phone Number</th>
+
+                <th class="view-reports-header">ID Proof</th>
+
+                <th class="view-reports-header">Comment</th>
+
+                <th class="view-reports-header">Date</th>
+
+                <th class="view-reports-header">Status</th>
+
+                <th class="view-reports-header">Staff</th>
+
+                <th class="view-reports-header">Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for report in reports %}
+
+            <tr class="view-reports-row">
+
+                <td class="view-reports-data">{{ report.name }}</td>
+
+                <td class="view-reports-data">{{ report.address }}</td>
+
+                <td class="view-reports-data">{{ report.phone_number }}</td>
+
+                <td class="view-reports-data"><img src="{{ report.id_proof.url }}" alt="ID Proof" class="view-reports-image"></td>
+
+                <td class="view-reports-data">{{ report.comment }}</td>
+
+                <td class="view-reports-data">{{ report.date }}</td>
+
+                <td class="view-reports-data">{{ report.get_status_display }}</td>
+                
+                <td class="view-reports-data">{{ report.staff }}</td>
+
+                <td class="view-reports-actions">
+
+                    <form method="post" action="{% url 'approve_report' report.id %}" style="display:inline;">
+
+                        {% csrf_token %}
+
+                        <button type="submit" class="view-reports-approve-button">Approve</button>
+
+                    </form>
+
+                    <form method="post" action="{% url 'reject_report' report.id %}" style="display:inline;">
+
+                        {% csrf_token %}
+
+                        <button type="submit" class="view-reports-reject-button">Reject</button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% include 'footer.html' %}
+
+</body>
+
+</html>

@@ -1,0 +1,159 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report List</title>
+
+    <link rel="stylesheet" href="{% static 'css/report_staff_view.css' %}"> <!-- Link to your external CSS file -->
+
+    <script src="{% static 'js/report_filter.js' %}" defer></script> <!-- Link to your external JavaScript file -->
+
+    {% include 'main_linkings.html' %}
+
+</head>
+
+
+<body>
+
+{% include 'header.html' %}
+
+<div class="report-list-container">
+
+    <h1 class="report-list-title">Reports</h1>
+
+
+    <!-- Filter Form -->
+
+    <div class="report-filter-container">
+
+        <label for="name-filter">Filter by Name:</label>
+
+        <select id="name-filter">
+
+            <option value="">All</option>
+
+            {% for report in reports %}
+
+                <option value="{{ report.name }}">{{ report.name }}</option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <label for="status-filter">Filter by Status:</label>
+
+        <select id="status-filter">
+
+            <option value="">All</option>
+
+            <option value="pending">Pending</option>
+
+            <option value="approved">Approved</option>
+
+            <option value="rejected">Rejected</option>
+
+        </select>
+
+
+        <label for="date-from">From Date:</label>
+
+        <input type="date" id="date-from">
+
+
+        <label for="date-to">To Date:</label>
+
+        <input type="date" id="date-to">
+
+
+        <button id="filter-button">Filter</button>
+
+    </div>
+
+
+    <table class="report-list-table">
+
+        <thead>
+
+            <tr>
+
+                <th class="report-list-header">Name</th>
+
+                <th class="report-list-header">Address</th>
+
+                <th class="report-list-header">Phone Number</th>
+
+                <th class="report-list-header">ID Proof</th>
+
+                <th class="report-list-header">Comment</th>
+
+                <th class="report-list-header">Date</th>
+
+                <th class="report-list-header">Status</th>
+
+                <th class="report-list-header">Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="report-table-body">
+
+            {% for report in reports %}
+
+            <tr class="report-list-row">
+
+                <td class="report-list-data">{{ report.name }}</td>
+
+                <td class="report-list-data">{{ report.address }}</td>
+
+                <td class="report-list-data">{{ report.phone_number }}</td>
+
+                <td class="report-list-data"><img src="{{ report.id_proof.url }}" alt="ID Proof" class="report-list-image"></td>
+
+                <td class="report-list-data">{{ report.comment }}</td>
+
+                <td class="report-list-data">{{ report.date }}</td>
+
+                <td class="report-list-data">{{ report.get_status_display }}</td>
+
+                <td class="report-list-actions">
+
+                    <a href="{% url 'edit_report' report.id %}" class="report-list-edit-button">Edit</a>
+
+                    <form method="post" action="{% url 'delete_report' report.id %}" style="display:inline;">
+
+                        {% csrf_token %}
+
+                        <button type="submit" class="report-list-delete-button">Delete</button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <a href="{% url 'add_report' %}" class="report-list-add-button">Add New Report</a>
+
+</div>
+
+{% include 'footer.html' %}
+
+</body>
+
+
+</html>

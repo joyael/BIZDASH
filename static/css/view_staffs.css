@@ -1,0 +1,93 @@
+.user-list-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 40px auto;
+    padding: 20px;
+    max-width: 1200px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.user-list-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.user-list-container .ulc-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.user-list-container .ulc-table thead {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.user-list-container .ulc-table th,
+.user-list-container .ulc-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.user-list-container .ulc-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.user-list-container .ulc-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.user-list-container .ulc-action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.user-list-container .ulc-btn {
+    padding: 8px 14px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+    display: inline-block;
+}
+
+.user-list-container .ulc-view-btn {
+    background-color: #007BFF;
+}
+
+.user-list-container .ulc-view-btn:hover {
+    background-color: #0069d9;
+}
+
+.user-list-container .ulc-edit-btn {
+    background-color: #28A745;
+}
+
+.user-list-container .ulc-edit-btn:hover {
+    background-color: #218838;
+}
+
+.user-list-container .ulc-delete-btn {
+    background-color: #DC3545;
+}
+
+.user-list-container .ulc-delete-btn:hover {
+    background-color: #c82333;
+}
+
+.user-list-container .ulc-add-btn {
+    background-color: #17a2b8;
+    margin-top: 10px;
+}
+
+.user-list-container .ulc-add-btn:hover {
+    background-color: #138496;
+}

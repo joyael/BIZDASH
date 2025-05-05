@@ -1,13 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect,  get_object_or_404
-from .models import CustomUser , Report
+from .models import CustomUser, Notification , Report
 from .operations_by_role import operations
 from django.contrib import messages
 from .forms import CustomUserForm, EditProfileForm, ReportForm
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import update_session_auth_hash
-
+from django.urls import reverse
 
 def user_login(request):
     if request.method == 'POST':
@@ -139,14 +139,29 @@ def add_report(request):
             return redirect('reports_staff_view')  # Redirect to the report list or another page
     else:
         form = ReportForm()
-    return render(request, 'report/add_report.html', {'form': form, 'operations': operations1,})
+    notifications = Notification.objects.filter(user=request.user)
+    unread_notifications_count = 0
+    for notification in notifications:
+        if notification.is_read == False:
+            unread_notifications_count+=1
+    return render(request, 'report/add_report.html', {'form': form, 'operations': operations1, 'notifications':notifications, 'unread_notifications_count':unread_notifications_count})
 
 
 @login_required
 def view_report(request, report_id):
     operations1 = operations[request.user.role]
     report = get_object_or_404(Report, id=report_id)
-    return render(request, 'report/view_report.html', {'report': report, 'operations': operations1,})
+    notifications = Notification.objects.filter(user=request.user)
+    unread_notifications_count = 0
+    for notification in notifications:
+        if notification.is_read == False:
+            unread_notifications_count+=1
+    return render(request, 'report/view_report.html', {
+        'report': report, 
+        'operations': operations1, 
+        'notifications':notifications, 
+        'unread_notifications_count':unread_notifications_count
+        })
 
 
 @login_required
@@ -164,7 +179,12 @@ def edit_report(request, report_id):
             return redirect('reports_staff_view')  # Redirect to the report list or another page
     else:
         form = ReportForm(instance=report)
-    return render(request, 'report/edit_report.html', {'form': form, 'report': report, 'operations': operations1,})
+    notifications = Notification.objects.filter(user=request.user)
+    unread_notifications_count = 0
+    for notification in notifications:
+        if notification.is_read == False:
+            unread_notifications_count+=1
+    return render(request, 'report/edit_report.html', {'form': form, 'report': report, 'operations': operations1,'notifications':notifications, 'unread_notifications_count':unread_notifications_count})
 
 
 @login_required
@@ -178,7 +198,12 @@ def delete_report(request, report_id):
         report.delete()
         messages.success(request, 'Report deleted successfully.')
         return redirect('reports_staff_view')  # Redirect to the report list or another page
-    return render(request, 'report/delete_report.html', {'report': report, 'operations': operations1,})
+    notifications = Notification.objects.filter(user=request.user)
+    unread_notifications_count = 0
+    for notification in notifications:
+        if notification.is_read == False:
+            unread_notifications_count+=1
+    return render(request, 'report/delete_report.html', {'report': report, 'operations': operations1,'notifications':notifications, 'unread_notifications_count':unread_notifications_count})
 
 
 @login_required
@@ -190,7 +215,12 @@ def reports_staff_view(request):
     # Retrieve all reports from the database
     reports = Report.objects.filter(staff=request.user)
     # Render the template with the reports context
-    return render(request, 'reports_staff_view.html', {'reports': reports, 'operations': operations1,})
+    notifications = Notification.objects.filter(user=request.user)
+    unread_notifications_count = 0
+    for notification in notifications:
+        if notification.is_read == False:
+            unread_notifications_count+=1
+    return render(request, 'reports_staff_view.html', {'reports': reports, 'operations': operations1,'notifications':notifications, 'unread_notifications_count':unread_notifications_count})
 
 @login_required
 def reports_manager_view(request):
@@ -240,8 +270,14 @@ def approve_report(request, report_id):
     operations1 = operations[request.user.role]
     report.status = 'approved'
     report.save()
+    Notification.objects.create(
+        user=report.staff,
+        content="Report : " + report.name +" approved",
+        link=reverse('view_report', args=[report.id])
+    )
+
     messages.success(request, 'Report approved successfully.')
-    return redirect('reports_manager_view', {'operations': operations1,})
+    return redirect('reports_manager_view')
 
 
 @login_required
@@ -252,13 +288,23 @@ def reject_report(request, report_id):
     operations1 = operations[request.user.role]
     report.status = 'rejected'
     report.save()
+    Notification.objects.create(
+        user=report.staff,
+        content="Report : " + report.name +" rejected",
+        link=reverse('view_report', args=[report.id])
+    )
     messages.success(request, 'Report rejected successfully.')
-    return redirect('reports_manager_view',{'operations': operations1,})
+    return redirect('reports_manager_view')
 
 @login_required
 def user_profile(request):
     user = request.user
-    return render(request, 'user_profile.html', {'user': user})
+    notifications = Notification.objects.filter(user=request.user)
+    unread_notifications_count = 0
+    for notification in notifications:
+        if notification.is_read == False:
+            unread_notifications_count+=1
+    return render(request, 'user_profile.html', {'user': user,'notifications':notifications, 'unread_notifications_count':unread_notifications_count})
 
 @login_required
 def edit_profile(request):
@@ -270,8 +316,12 @@ def edit_profile(request):
             return redirect('user_profile')
     else:
         form = EditProfileForm(instance=user)
-
-    return render(request, 'edit_profile.html', {'form': form, 'user': user})
+    notifications = Notification.objects.filter(user=request.user)
+    unread_notifications_count = 0
+    for notification in notifications:
+        if notification.is_read == False:
+            unread_notifications_count+=1
+    return render(request, 'edit_profile.html', {'form': form, 'user': user,'notifications':notifications, 'unread_notifications_count':unread_notifications_count})
 
 @login_required
 def change_password(request):
@@ -292,5 +342,17 @@ def change_password(request):
             update_session_auth_hash(request, user)  # Keeps user logged in
             messages.success(request, 'Password changed successfully.')
             return redirect('user_profile')
+    notifications = Notification.objects.filter(user=request.user)
+    unread_notifications_count = 0
+    for notification in notifications:
+        if notification.is_read == False:
+            unread_notifications_count+=1
 
-    return render(request, 'change_password.html')
+    return render(request, 'change_password.html',{})
+
+@login_required
+def read_notification(request, pk):
+    notification = get_object_or_404(Notification, pk=pk, user=request.user)
+    notification.is_read = True
+    notification.save()
+    return redirect(notification.link)

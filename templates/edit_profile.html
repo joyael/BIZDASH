@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <title>Edit Profile</title>
     <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+    {% include 'main_linkings.html' %}
 </head>
 <body>
-
+    {% include 'header.html' %}
 <div class="edit-profile-container">
     <h1 class="edit-profile-container__title">Edit Profile</h1>
 
@@ -45,6 +46,6 @@
 
     <a href="{% url 'change_password' %}" class="edit-profile-container__password-button">Change Password</a>
 </div>
-
+    {% include 'footer.html' %}
 </body>
 </html>

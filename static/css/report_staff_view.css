@@ -79,3 +79,70 @@
 .report-list-add-button:hover {
     background-color: #218838; /* Darker green */
 }
+
+
+.report-filter-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 20px 24px;
+    background-color: #f1f4f8;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.report-filter-container label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    margin-right: 6px;
+}
+
+.report-filter-container select,
+.report-filter-container input[type="date"] {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.report-filter-container select:focus,
+.report-filter-container input[type="date"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.report-filter-container button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.report-filter-container button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+    .report-filter-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .report-filter-container label,
+    .report-filter-container select,
+    .report-filter-container input[type="date"],
+    .report-filter-container button {
+        width: 100%;
+    }
+}

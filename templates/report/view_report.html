@@ -27,7 +27,11 @@
             {% csrf_token %}
             <button class="view-report-delete-button" type="submit">Delete Report</button>
         </form>
-        <a class="view-report-back" href="{% url 'view_reports' %}">Back to Reports</a>
+        {% if request.user.role == 'staff' %}
+            <a class="view-report-back" href="{% url 'reports_staff_view' %}">Back to Reports</a>
+        {% elif request.user.role == 'manager' %}
+            <a class="view-report-back" href="{% url 'reports_manager_view' %}">Back to Reports</a>
+        {% endif %}
     </div>
 
 </div>

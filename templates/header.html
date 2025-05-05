@@ -26,10 +26,33 @@
 
         {% if request.user %}
         <div class="special-header__auth-buttons">
-            <button class="special-header__profile-button">Profile</button>
+            <button onclick="window.location.href='{% url 'user_profile' %}'" class="special-header__profile-button">Profile</button>
             <button onclick="window.location.href='{% url 'logout' %}'" class="special-header__login-button">Logout</button>
         </div>
-        
-        {% endif %}     
+        {% endif %}
+        <div class="notification-wrapper">
+            <button id="notification-btn" class="notification-btn">
+                🔔
+                {% if unread_notifications_count != 0 %}
+                <span class="notification-badge">
+                    {{ unread_notifications_count }}
+                </span>
+                {% endif %}
+            </button>
+        </div>
     </div>
 </header>
+
+<div id="notification-panel" class="notification-panel">
+    <div class="notification-header">
+        <h3>Notifications</h3>
+        <button id="close-panel">✖</button>
+    </div>
+    <div class="notification-list">
+        {% for note in notifications %}
+        <div class="notification-box {% if not note.is_read %}unread{% endif %}">
+            <a href="{% url 'read_notification' note.id %}">{{ note.content }}</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>

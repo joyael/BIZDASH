@@ -26,6 +26,9 @@ urlpatterns = [
 
     path('profile/', user_profile, name='user_profile'),
     path('profile/edit/', edit_profile, name='edit_profile'),
+    path('change_password',change_password, name = 'change_password'),
+    path('notification/<int:pk>/', read_notification, name='read_notification'),
+
     # path('profile/change-password/', change_password, name='change_password'),  # Optional placeholder
 
 ]

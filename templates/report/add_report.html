@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Report</title>
     <link rel="stylesheet" href="{% static 'css/add_report.css' %}"> <!-- Link to external CSS -->
+    {% include 'main_linkings.html' %}
 </head>
 <body>
     {% include 'header.html' %}
@@ -18,7 +19,7 @@
         </div>
         <button class="add-report-button" type="submit">Add Report</button>
     </form>
-    <a class="add-report-cancel" href="{% url 'view_reports' %}">Cancel</a>
+    <a class="add-report-cancel" href="{% url 'reports_staff_view' %}">Cancel</a>
 </div>
 {% include 'footer.html' %}
 </body>

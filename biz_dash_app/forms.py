@@ -29,5 +29,13 @@ class ReportForm(forms.ModelForm):
         fields = ['name', 'address', 'phone_number', 'id_proof', 'comment']
 
     
-
-
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'email', 'username']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'edit-profile-form__input'}),
+            'last_name': forms.TextInput(attrs={'class': 'edit-profile-form__input'}),
+            'email': forms.EmailInput(attrs={'class': 'edit-profile-form__input'}),
+            'username': forms.TextInput(attrs={'class': 'edit-profile-form__input'}),
+        }

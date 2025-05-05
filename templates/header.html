@@ -24,9 +24,12 @@
             </ul>
         </nav>
 
+        {% if request.user %}
         <div class="special-header__auth-buttons">
             <button class="special-header__profile-button">Profile</button>
             <button onclick="window.location.href='{% url 'logout' %}'" class="special-header__login-button">Logout</button>
         </div>
+        
+        {% endif %}     
     </div>
 </header>

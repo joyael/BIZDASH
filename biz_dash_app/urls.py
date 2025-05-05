@@ -22,4 +22,10 @@ urlpatterns = [
     path('reports_manager_view/', reports_manager_view, name='reports_manager_view'),
     path('reports/approve/<int:report_id>/', approve_report, name='approve_report'),
     path('reports/reject/<int:report_id>/', reject_report, name='reject_report'),
+
+
+    path('profile/', user_profile, name='user_profile'),
+    path('profile/edit/', edit_profile, name='edit_profile'),
+    # path('profile/change-password/', change_password, name='change_password'),  # Optional placeholder
+
 ]

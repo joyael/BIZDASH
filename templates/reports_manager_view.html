@@ -20,7 +20,7 @@
         <label for="nameFilter">Name:</label>
         <select id="nameFilter">
             <option value="">All</option>
-            {% for report in reports|dictsort:"name"|unique %}
+            {% for report in reports|dictsort:"name" %}
                 <option value="{{ report.name }}">{{ report.name }}</option>
             {% endfor %}
         </select>
@@ -28,16 +28,16 @@
         <label for="statusFilter">Status:</label>
         <select id="statusFilter">
             <option value="">All</option>
-            {% for report in reports|dictsort:"status"|unique %}
-                <option value="{{ report.get_status_display }}">{{ report.get_status_display }}</option>
-            {% endfor %}
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
         </select>
 
         <label for="staffFilter">Staff:</label>
         <select id="staffFilter">
             <option value="">All</option>
-            {% for report in reports|dictsort:"staff"|unique %}
-                <option value="{{ report.staff }}">{{ report.staff }}</option>
+            {% for staff in staff_members %}
+                <option value="{{ staff }}">{{ staff }}</option>
             {% endfor %}
         </select>
 

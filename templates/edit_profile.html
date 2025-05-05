@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+</head>
+<body>
+
+<div class="edit-profile-container">
+    <h1 class="edit-profile-container__title">Edit Profile</h1>
+
+    <form method="post" class="edit-profile-container__form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="edit-profile-container__group">
+            {{ form.first_name.label_tag }}{{ form.first_name }}
+        </div>
+        <div class="edit-profile-container__group">
+            {{ form.last_name.label_tag }}{{ form.last_name }}
+        </div>
+        <div class="edit-profile-container__group">
+            {{ form.email.label_tag }}{{ form.email }}
+        </div>
+        <div class="edit-profile-container__group">
+            {{ form.username.label_tag }}{{ form.username }}
+        </div>
+
+        <div class="edit-profile-container__group">
+            <label>Role:</label>
+            <p>{{ user.get_role_display }}</p>
+        </div>
+
+        {% if user.role == 'staff' and user.manager %}
+        <div class="edit-profile-container__group">
+            <label>Manager:</label>
+            <p>{{ user.manager.get_full_name }}</p>
+        </div>
+        {% endif %}
+
+        <button type="submit" class="edit-profile-container__save-button">Save Changes</button>
+    </form>
+
+    <a href="{% url 'change_password' %}" class="edit-profile-container__password-button">Change Password</a>
+</div>
+
+</body>
+</html>

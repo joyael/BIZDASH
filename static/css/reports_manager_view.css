@@ -66,3 +66,76 @@
 .view-reports-reject-button:hover {
     opacity: 0.8;
 }
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.filters label {
+    font-weight: 600;
+    margin-right: 8px;
+    color: #333;
+}
+
+.filters select,
+.filters input[type="date"] {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.filters select:focus,
+.filters input[type="date"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.filters button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filters button:hover {
+    background-color: #0056b3;
+}
+
+.filters button + button {
+    background-color: #6c757d;
+}
+
+.filters button + button:hover {
+    background-color: #5a6268;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    .filters {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filters label,
+    .filters select,
+    .filters input[type="date"],
+    .filters button {
+        width: 100%;
+    }
+}

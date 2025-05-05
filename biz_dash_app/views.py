@@ -4,8 +4,9 @@ from django.shortcuts import render, redirect,  get_object_or_404
 from .models import CustomUser , Report
 from .operations_by_role import operations
 from django.contrib import messages
-from .forms import CustomUserForm, ReportForm
+from .forms import CustomUserForm, EditProfileForm, ReportForm
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth import update_session_auth_hash
 
 
 def user_login(request):
@@ -18,7 +19,7 @@ def user_login(request):
             if user.role == 'manager':
                 return redirect('manager_home')
             elif user.role == 'staff':
-                return redirect('staff_home')  # Redirect to a success page
+                return redirect('reports_staff_view')  # Redirect to a success page
         else:
             return render(request, 'login.html', {'error': 'Invalid credentials'})
     return render(request, 'login.html')
@@ -135,7 +136,7 @@ def add_report(request):
             report.staff = request.user  # Set the current user as the manager
             report.save()
             messages.success(request, 'Report added successfully.')
-            return redirect('view_reports')  # Redirect to the report list or another page
+            return redirect('reports_staff_view')  # Redirect to the report list or another page
     else:
         form = ReportForm()
     return render(request, 'report/add_report.html', {'form': form, 'operations': operations1,})
@@ -160,7 +161,7 @@ def edit_report(request, report_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Report updated successfully.')
-            return redirect('view_reports')  # Redirect to the report list or another page
+            return redirect('reports_staff_view')  # Redirect to the report list or another page
     else:
         form = ReportForm(instance=report)
     return render(request, 'report/edit_report.html', {'form': form, 'report': report, 'operations': operations1,})
@@ -176,7 +177,7 @@ def delete_report(request, report_id):
     if request.method == 'POST':
         report.delete()
         messages.success(request, 'Report deleted successfully.')
-        return redirect('view_reports')  # Redirect to the report list or another page
+        return redirect('reports_staff_view')  # Redirect to the report list or another page
     return render(request, 'report/delete_report.html', {'report': report, 'operations': operations1,})
 
 
@@ -200,11 +201,11 @@ def reports_manager_view(request):
     # Get the current user (manager)
     manager = request.user
     # Get all staff members under this manager
-    staff_members = CustomUser .objects.filter(manager=manager)
+    staff_members = CustomUser.objects.filter(manager=manager)
     # Get reports for the staff members under this manager
     reports = Report.objects.filter(staff__in=staff_members)
     # Render the template with the list of reports
-    return render(request, 'reports_manager_view.html', {'reports': reports, 'operations': operations1,})
+    return render(request, 'reports_manager_view.html', {'reports': reports, 'operations': operations1, 'staff_members':staff_members})
 
 
 @login_required
@@ -253,3 +254,43 @@ def reject_report(request, report_id):
     report.save()
     messages.success(request, 'Report rejected successfully.')
     return redirect('reports_manager_view',{'operations': operations1,})
+
+@login_required
+def user_profile(request):
+    user = request.user
+    return render(request, 'user_profile.html', {'user': user})
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user_profile')
+    else:
+        form = EditProfileForm(instance=user)
+
+    return render(request, 'edit_profile.html', {'form': form, 'user': user})
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        user = request.user
+
+        if not user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect.')
+        elif new_password != confirm_password:
+            messages.error(request, 'New passwords do not match.')
+        else:
+            user.set_password(new_password)  # Password is hashed before saving
+            user.save()
+            update_session_auth_hash(request, user)  # Keeps user logged in
+            messages.success(request, 'Password changed successfully.')
+            return redirect('user_profile')
+
+    return render(request, 'change_password.html')

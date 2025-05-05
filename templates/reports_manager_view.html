@@ -1,115 +1,148 @@
 {% load static %}
-
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>View Reports</title>
-
-    <link rel="stylesheet" href="{% static 'css/reports_manager_view.css' %}"> <!-- Link to your external CSS file -->
-
+    <link rel="stylesheet" href="{% static 'css/reports_manager_view.css' %}">
     {% include 'main_linkings.html' %}
-
 </head>
 
-
 <body>
-
 {% include 'header.html' %}
 
 <div class="view-reports-container">
-
     <h1 class="view-reports-title">Reports of Your Staffs</h1>
 
-
-    <table class="view-reports-table">
-
-        <thead>
-
-            <tr>
-
-                <th class="view-reports-header">Name</th>
-
-                <th class="view-reports-header">Address</th>
-
-                <th class="view-reports-header">Phone Number</th>
-
-                <th class="view-reports-header">ID Proof</th>
-
-                <th class="view-reports-header">Comment</th>
-
-                <th class="view-reports-header">Date</th>
-
-                <th class="view-reports-header">Status</th>
-
-                <th class="view-reports-header">Staff</th>
-
-                <th class="view-reports-header">Actions</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-            {% for report in reports %}
-
-            <tr class="view-reports-row">
-
-                <td class="view-reports-data">{{ report.name }}</td>
-
-                <td class="view-reports-data">{{ report.address }}</td>
-
-                <td class="view-reports-data">{{ report.phone_number }}</td>
-
-                <td class="view-reports-data"><img src="{{ report.id_proof.url }}" alt="ID Proof" class="view-reports-image"></td>
-
-                <td class="view-reports-data">{{ report.comment }}</td>
-
-                <td class="view-reports-data">{{ report.date }}</td>
-
-                <td class="view-reports-data">{{ report.get_status_display }}</td>
-                
-                <td class="view-reports-data">{{ report.staff }}</td>
-
-                <td class="view-reports-actions">
-
-                    <form method="post" action="{% url 'approve_report' report.id %}" style="display:inline;">
-
-                        {% csrf_token %}
-
-                        <button type="submit" class="view-reports-approve-button">Approve</button>
-
-                    </form>
-
-                    <form method="post" action="{% url 'reject_report' report.id %}" style="display:inline;">
-
-                        {% csrf_token %}
-
-                        <button type="submit" class="view-reports-reject-button">Reject</button>
-
-                    </form>
-
-                </td>
-
-            </tr>
-
+    <!-- Filters Section -->
+    <div class="filters">
+        <label for="nameFilter">Name:</label>
+        <select id="nameFilter">
+            <option value="">All</option>
+            {% for report in reports|dictsort:"name"|unique %}
+                <option value="{{ report.name }}">{{ report.name }}</option>
             {% endfor %}
+        </select>
 
+        <label for="statusFilter">Status:</label>
+        <select id="statusFilter">
+            <option value="">All</option>
+            {% for report in reports|dictsort:"status"|unique %}
+                <option value="{{ report.get_status_display }}">{{ report.get_status_display }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="staffFilter">Staff:</label>
+        <select id="staffFilter">
+            <option value="">All</option>
+            {% for report in reports|dictsort:"staff"|unique %}
+                <option value="{{ report.staff }}">{{ report.staff }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="fromDate">From Date:</label>
+        <input type="date" id="fromDate">
+
+        <label for="toDate">To Date:</label>
+        <input type="date" id="toDate">
+
+        <button onclick="filterTable()">Filter</button>
+        <button onclick="resetFilters()">Reset</button>
+    </div>
+
+    <table class="view-reports-table" id="reportsTable">
+        <thead>
+            <tr>
+                <th class="view-reports-header">Name</th>
+                <th class="view-reports-header">Address</th>
+                <th class="view-reports-header">Phone Number</th>
+                <th class="view-reports-header">ID Proof</th>
+                <th class="view-reports-header">Comment</th>
+                <th class="view-reports-header">Date</th>
+                <th class="view-reports-header">Status</th>
+                <th class="view-reports-header">Staff</th>
+                <th class="view-reports-header">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr class="view-reports-row">
+                <td class="view-reports-data name">{{ report.name }}</td>
+                <td class="view-reports-data">{{ report.address }}</td>
+                <td class="view-reports-data">{{ report.phone_number }}</td>
+                <td class="view-reports-data">
+                    <img src="{{ report.id_proof.url }}" alt="ID Proof" class="view-reports-image">
+                </td>
+                <td class="view-reports-data">{{ report.comment }}</td>
+                <td class="view-reports-data date">{{ report.date }}</td>
+                <td class="view-reports-data status">{{ report.get_status_display }}</td>
+                <td class="view-reports-data staff">{{ report.staff }}</td>
+                <td class="view-reports-actions">
+                    <form method="post" action="{% url 'approve_report' report.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="view-reports-approve-button">Approve</button>
+                    </form>
+                    <form method="post" action="{% url 'reject_report' report.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="view-reports-reject-button">Reject</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
-
     </table>
-
 </div>
 
 {% include 'footer.html' %}
 
-</body>
+<!-- JavaScript Filtering -->
+<script>
+function filterTable() {
+    const nameFilter = document.getElementById('nameFilter').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+    const staffFilter = document.getElementById('staffFilter').value.toLowerCase();
+    const fromDate = document.getElementById('fromDate').value;
+    const toDate = document.getElementById('toDate').value;
 
+    const rows = document.querySelectorAll('#reportsTable tbody tr');
+
+    rows.forEach(row => {
+        const name = row.querySelector('.name').textContent.toLowerCase();
+        const status = row.querySelector('.status').textContent.toLowerCase();
+        const staff = row.querySelector('.staff').textContent.toLowerCase();
+        const dateText = row.querySelector('.date').textContent.trim();
+        const rowDate = new Date(dateText);
+
+        let show = true;
+
+        if (nameFilter && name !== nameFilter) show = false;
+        if (statusFilter && status !== statusFilter) show = false;
+        if (staffFilter && staff !== staffFilter) show = false;
+
+        if (fromDate) {
+            const from = new Date(fromDate);
+            if (rowDate < from) show = false;
+        }
+
+        if (toDate) {
+            const to = new Date(toDate);
+            if (rowDate > to) show = false;
+        }
+
+        row.style.display = show ? '' : 'none';
+    });
+}
+
+function resetFilters() {
+    document.getElementById('nameFilter').value = '';
+    document.getElementById('statusFilter').value = '';
+    document.getElementById('staffFilter').value = '';
+    document.getElementById('fromDate').value = '';
+    document.getElementById('toDate').value = '';
+    filterTable();
+}
+</script>
+
+</body>
 </html>
